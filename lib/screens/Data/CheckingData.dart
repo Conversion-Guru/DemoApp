@@ -26,7 +26,7 @@ class _CheckData extends State<CheckData>{
         appBar: AppBar(title: Text("ConversionGuru Demo App"),),
         body:WillPopScope(
           onWillPop: (){
-            //write smtg jatin
+            //write smtg
           },
           child:Center(
             child:Column(

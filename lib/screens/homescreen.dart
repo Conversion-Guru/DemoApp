@@ -92,18 +92,18 @@ class _HomeScreenState extends State<HomeScreen>
           
           Column(children:<Widget>
         [
-          Padding(
-             padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical*1.5,right:SizeConfig.blockSizeVertical*1.5 ),
-         child: RaisedButton(
-              color: Colors.green,
-            child: Text("Data testing"),
-            onPressed: ()
-            {
-              Navigator.pushNamed(context,'CheckData');
+        //   Padding(
+        //      padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical*1.5,right:SizeConfig.blockSizeVertical*1.5 ),
+        //  child: RaisedButton(
+        //       color: Colors.green,
+        //     child: Text("Data testing"),
+        //     onPressed: ()
+        //     {
+        //       Navigator.pushNamed(context,'CheckData');
 
-            },
-          ),
-          ),
+        //     },
+        //   ),
+        //   ),
 
           RaisedButton(
               color: Colors.blue,
@@ -140,18 +140,18 @@ class _HomeScreenState extends State<HomeScreen>
             },
           ),
           ),
-           Padding(
-             padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical*2.5,right:SizeConfig.blockSizeVertical*1.5 ),
-         child: RaisedButton(
-              color: Colors.blue,
-            child: Text("Test"),
-            onPressed: ()
-            {
-              Navigator.pushNamed(context,'Test');
+        //    Padding(
+        //      padding: EdgeInsets.only(left: SizeConfig.blockSizeVertical*2.5,right:SizeConfig.blockSizeVertical*1.5 ),
+        //  child: RaisedButton(
+        //       color: Colors.blue,
+        //     child: Text("Test"),
+        //     onPressed: ()
+        //     {
+        //       Navigator.pushNamed(context,'Test');
 
-            },
-          ),
-          ),
+        //     },
+        //   ),
+        //   ),
         ]
         ),
       ),

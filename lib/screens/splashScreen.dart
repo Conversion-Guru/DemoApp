@@ -1,14 +1,25 @@
+import 'package:demo_app/screens/homepage.dart';
+import 'package:demo_app/screens/homescreen.dart';
+// import 'package:demo_app/Arrangements/Drawer.dart';
+import 'package:demo_app/screens/status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:splashscreen/splashscreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Arrangements/sizeModification.dart';
 import './selectScreen.dart';
+
 class Splash extends StatefulWidget {
   @override
   _SplashState createState() => new _SplashState();
 }
 
 class _SplashState extends State<Splash> {
+  // BuildContext context;
+  //  var status= StatusProvider.of(context);
+
+  // bool _islogin;
   // startTime() async {
   //   var _duration = new Duration(seconds: 3);
   //   return new Timer(_duration, navigationPage);
@@ -18,11 +29,36 @@ class _SplashState extends State<Splash> {
   //   Navigator.of(context).pushReplacementNamed('HomeScreen');
   // }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   startTime();
-  // }
+  @override
+  initState() {
+    FirebaseAuth.instance
+        .currentUser()
+        .then((currentUser) => {
+              if (currentUser == null)
+                {
+                  // status._islogin=false,
+                  print("jp no user ra"),
+                  Navigator.pushReplacementNamed(context, "Login")
+                }
+              else
+                {
+                  
+                  print("jp user yes ra"),
+                  // Navigator.pushNamed(context, "Homescreen"),
+                  Firestore.instance
+                      .collection("users")
+                      .document(currentUser.uid)
+                      .get()
+                      .then((DocumentSnapshot result) =>
+                         
+                         Navigator.pushNamed(context,"HomeScreen"),
+                                      )
+                      .catchError((err) => print(err))
+                }
+            })
+        .catchError((err) => print(err));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
