@@ -1,23 +1,32 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:demo_app/Arrangements/Drawer.dart';
+import 'package:demo_app/screens/bottomNavigation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import './isConnection.dart';
 
-class HomePage extends StatefulWidget
+class HomePage extends StatelessWidget
 {
-  @override
-  _HomePage createState() => _HomePage();
-}
-
-class _HomePage extends State<HomePage>{
-  Map _source = {ConnectivityResult.none: false};
+  HomePage({this.title,this.uid});
+  String title;
+  String uid;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    if (_source.keys.toList()[0] == ConnectivityResult.none)
-     {
-      //  show();
-     }
-    return null;
+    return new Scaffold(
+      bottomNavigationBar: bottomnavigation(context, 1),
+      drawer: theDrawer(context),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            // Text("$title");
+            Text("\n\n\n$title"),
+            Text("$uid's"),
+            ],
+        ),
+           ),
+    );
   }
   
+
 }

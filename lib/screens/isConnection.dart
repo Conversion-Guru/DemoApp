@@ -5,10 +5,12 @@ import 'package:demo_app/Arrangements/sizeModification.dart';
 import 'package:demo_app/Screens/contactUS.dart';
 import 'package:demo_app/screens/Data/Account.dart';
 import 'package:demo_app/screens/Data/contactForm.dart';
+import 'package:demo_app/screens/Data/login.dart';
 import 'package:demo_app/screens/Data/signIn.dart';
 import 'package:demo_app/screens/bottomNavigation.dart';
 import 'package:demo_app/screens/cart.dart';
 import 'package:demo_app/screens/help.dart';
+import 'package:demo_app/screens/logout.dart';
 import 'package:demo_app/screens/privacy.dart';
 import 'package:demo_app/screens/showImage.dart';
 import 'package:demo_app/screens/test.dart';
@@ -94,6 +96,9 @@ class _IsConnection extends State<IsConnection> {
         'AccountInfo':(BuildContext context) => new AccountInfo(),
         'Help':(BuildContext context) => new Help(),
         'Privacy':(BuildContext context) => new Privacy(),
+        'Login': (BuildContext context) => new LoginPage(),
+        'Logout': (BuildContext context) => new Logout(),
+
     },
   );
     }

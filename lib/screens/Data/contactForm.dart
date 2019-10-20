@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_app/Arrangements/Drawer.dart';
 import 'package:demo_app/screens/bottomNavigation.dart';
 import 'package:flutter/widgets.dart';
@@ -10,6 +11,27 @@ class ContactForm extends StatefulWidget
 }
 
 class _ContactFormState extends State<ContactForm> {
+   final GlobalKey<FormState> _contactFormKey = GlobalKey<FormState>();
+  TextEditingController nameInput;
+  TextEditingController cityInput;
+  TextEditingController phoneNumberInput;
+  TextEditingController emailInput;
+  TextEditingController stateInput;
+  TextEditingController msgInput;
+
+
+
+  @override
+  initState() {
+    nameInput = new TextEditingController();
+    emailInput = new TextEditingController();
+    cityInput=new TextEditingController();
+    phoneNumberInput=new TextEditingController();
+    stateInput=new TextEditingController();
+    msgInput = new TextEditingController();
+    super.initState();
+  }
+
   var _dropforms= [
    'General','Feedback','Corporate','BulkOrder'
   ]; 
@@ -39,11 +61,15 @@ class _ContactFormState extends State<ContactForm> {
                   },
                   child: Container(
                     margin: EdgeInsets.all(SizeConfig.blockSizeVertical*1.5),
-                    child: ListView(
-                      children: <Widget>[
+                    child:Form(
+                      key: _contactFormKey,
+                      child: ListView(
+                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical*1.5,bottom:SizeConfig.blockSizeVertical*1.5 ),
-                          child:TextField(
+                          child:TextFormField(
+                            controller: nameInput,
+                            validator: nameValidator,
                             style:textStyle,
                           // keyboardType: Text(),
                           decoration: InputDecoration(
@@ -58,9 +84,11 @@ class _ContactFormState extends State<ContactForm> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical*1.5,bottom:SizeConfig.blockSizeVertical*1.5 ),
-                      child: TextField(
+                      child: TextFormField(
                           keyboardType: TextInputType.number,
+                          controller: phoneNumberInput,
                            style:textStyle,
+                           validator: phoneValidator,
                           decoration: InputDecoration(
                              labelStyle:textStyle,
                             labelText: "Mobile",
@@ -73,9 +101,28 @@ class _ContactFormState extends State<ContactForm> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical*1.5,bottom:SizeConfig.blockSizeVertical*1.5 ),
-                      child: TextField(
+                      child: TextFormField(
+                        controller: emailInput,
+                          keyboardType: TextInputType.emailAddress,
+                           style:textStyle,
+                           validator: emailValidator,
+                          decoration: InputDecoration(
+                             labelStyle:textStyle,
+                            labelText: "Email id",
+                            hintText: "Enter your EMail id",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(SizeConfig.blockSizeVertical*1.5)
+                            )
+                          ),
+                        ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical*1.5,bottom:SizeConfig.blockSizeVertical*1.5 ),
+                      child: TextFormField(
                           // keyboardType: TextInputType.number,
                            style:textStyle,
+                           controller: cityInput,
+                           validator: nameValidator,
                           decoration: InputDecoration(
                              labelStyle:textStyle,
                             labelText: "City",
@@ -91,9 +138,10 @@ class _ContactFormState extends State<ContactForm> {
                       child: TextField(
                           // keyboardType: TextInputType.number,
                            style:textStyle,
+                          //  controller: ,
                           decoration: InputDecoration(
                              labelStyle:textStyle,
-                            labelText: "State",
+                            labelText: "State(optional)",
                             hintText: "Enter your State",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(SizeConfig.blockSizeVertical*1.5)
@@ -190,9 +238,11 @@ class _ContactFormState extends State<ContactForm> {
 
                 Padding(
                           padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical*1.5,bottom:SizeConfig.blockSizeVertical*1.5 ),
-                      child: TextField(
-                        
+                      child: TextFormField(
+                        controller: msgInput,
+                        validator: nameValidator,
                          style:textStyle,
+                         maxLines: 3,
                           // keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                              labelStyle:textStyle,
@@ -207,24 +257,37 @@ class _ContactFormState extends State<ContactForm> {
 
                   Padding(
                       padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical*1.5,bottom:SizeConfig.blockSizeVertical*1.5 ),
-                      child:FlatButton(
+                      child:RaisedButton(
                         child: Text("Submit"),
                         color: Colors.redAccent,
                         onPressed: ()
                         {   
-                          Navigator.pushNamed(context,'HomeScreen');
-                          // print("yes");
-                          // new SnackBar(
-                          //   content: Text("Your form is submitted succesfully"),
-                          //   action: SnackBarAction(
-                          //     label: 'Undo',
-                          //     onPressed: () {
-                          //       // Some code to undo the change.
-                          //     },
-                          //   ),
-        
-                          // );
-                          // Scaffold.of(context).showSnackBar(snackBar);
+                           if (_contactFormKey.currentState.validate()) {
+                                      Firestore.instance
+                                      .collection('Contact Form Data')
+                                      .document(nameInput.text)
+                                      .setData({
+                                        "name":nameInput.text,
+                                        // "uid": currentUser.uid,
+                                        "city": cityInput.text,
+                                        "message": msgInput.text,
+                                        "email": emailInput.text,
+                                        "mobile":phoneNumberInput.text,
+                                        
+                                      })
+                                      .then((result) => {
+                                        
+                                            Navigator.pushNamed(context,"HomeScreen"),
+                                        nameInput.clear(),
+                                        cityInput.clear(),
+                                        phoneNumberInput.clear(),
+                                        emailInput.clear(),
+                                        msgInput.clear(),
+                                        stateInput.clear(),
+                                      })
+                                  .catchError((err) => print(err));
+                              }
+   
                         },
                         ),
                     ) ,
@@ -233,6 +296,40 @@ class _ContactFormState extends State<ContactForm> {
                 ),
               ),
             ),
+          )
           );
           }
-        } 
+        
+  String nameValidator(String value) 
+  {
+    if(value.length<3)
+    {
+      return "please fill this field";
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+String phoneValidator(String value)
+{
+if (value.length!=10) {
+      return 'Phone Number must be of 10 digits';
+    } else {
+      return null;
+    }
+}
+
+String emailValidator(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value)) {
+      return 'Email format is invalid';
+    } else {
+      return null;
+    }
+  }
+
+} 
